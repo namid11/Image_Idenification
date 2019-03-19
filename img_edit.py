@@ -9,7 +9,7 @@ def imgs_crop(imgs):
     crop_frames = []
     for i, img in enumerate(imgs):
         # 画像の一部を摘出
-        crop_frame = tf.random_crop(img, [700, 500, 3])
+        crop_frame = tf.random_crop(img, [24, 24, 3])
         crop_frames.append(crop_frame)
     return np.array(crop_frames)
 
@@ -72,6 +72,7 @@ def imgs_save(imgs, path='test'):
     fig.savefig('test_E.jpeg')
 
 
+#
 def imgs_show(imgs, path='test'):
     fig = plt.figure(figsize=(5,5))
     for i, img in enumerate(imgs):
