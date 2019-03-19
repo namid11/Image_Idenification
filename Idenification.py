@@ -1,7 +1,6 @@
-import numpy as np
-import tensorflow as tf
 from DataOperation import *
 from img_edit import *
+
 
 
 # showImage(0, 100)
@@ -71,14 +70,14 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 if __name__ == '__main__':
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        saver = tf.train.Saver()
+        #saver = tf.train.Saver()
         batch_size = 50
 
         t_num = 20000
         for i in range(t_num):
             # トレーニングデータ取得
             set_target_data(1)
-            batch_imgs = imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + 50))
+            batch_imgs = imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size))
             batcH_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + 50, 10)
 
             # 正解率確認
@@ -87,3 +86,5 @@ if __name__ == '__main__':
                 acc_val = sess.run(accuracy, feed_dict={x:getImagesArray(0, 100),
                                                         t:getLabelsArray(0, 100, 10)})
                 print('Step: %d, Accuracy: %f' % (i+1, acc_val))
+            else:
+                print('Step: %d' % (i+1))
