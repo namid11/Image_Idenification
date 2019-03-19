@@ -4,15 +4,15 @@ from DataOperation import *
 from img_edit import *
 
 
-#showImage(0, 100)
-
-# トレーニングデータの数
-__TRAINING_DATA_NUM = 10000
-# トレーニングデータ格納配列（のち、numpy.arrayに変換）
-training_datas = []
-for i in range(__TRAINING_DATA_NUM):
-    training_datas.append(getImageA(i))
-training_datas = np.array(training_datas)
+# showImage(0, 100)
+#
+# # トレーニングデータの数
+# __TRAINING_DATA_NUM = 10000
+# # トレーニングデータ格納配列（のち、numpy.arrayに変換）
+# training_datas = []
+# for i in range(__TRAINING_DATA_NUM):
+#     training_datas.append(getImageA(i))
+# training_datas = np.array(training_datas)
 
 
 
