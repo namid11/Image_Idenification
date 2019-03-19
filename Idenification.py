@@ -71,14 +71,15 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         #saver = tf.train.Saver()
-        batch_size = 50
+        batch_size = 30
 
         t_num = 20000
         for i in range(t_num):
             # トレーニングデータ取得
             set_target_data(1)
             batch_imgs = imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size))
-            batcH_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + 50, 10)
+            batch_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + batch_size, 10)
+            sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
 
             # 正解率確認
             if (i+1) % 500 == 0:
