@@ -18,8 +18,8 @@ from img_edit import *
 # １段目の畳み込みフィルターとプーリング層を定義
 num_filters_1 = 32
 
-x = tf.placeholder(tf.float32, [None, 3072])
-x_image = tf.reshape(x, [-1,32,32,3])
+x = tf.placeholder(tf.float32, [None, 1728])
+x_image = tf.reshape(x, [-1,24,24,3])
 
 w_conv_1 = tf.Variable(tf.truncated_normal([5,5,3,num_filters_1], stddev=0.1))
 h_conv_1 = tf.nn.conv2d(x_image, w_conv_1, strides=[1,1,1,1], padding="SAME")                   # 畳み込み処理
@@ -77,7 +77,8 @@ if __name__ == '__main__':
         for i in range(t_num):
             # トレーニングデータ取得
             set_target_data(1)
-            batch_imgs = imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size))
+            batch_imgs = get_frames_data(sess, imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size)))
+            batch_imgs = batch_imgs.reshape([-1, 1728])
             batch_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + batch_size, 10)
             sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
 
