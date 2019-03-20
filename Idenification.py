@@ -83,7 +83,7 @@ if __name__ == '__main__':
             sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
 
             # 正解率確認
-            if (i+1) % 5 == 0:
+            if (i+1) % 500 == 0:
                 set_target_data(2)
                 acc_val = sess.run(accuracy, feed_dict={x:get_frames_data(sess, imgs_crop(getImagesArray(0, 100))).reshape([-1, 1728]),
                                                         t:getLabelsArray(0, 100, 10)})
