@@ -61,6 +61,15 @@ def imgs_processing(imgs):
     return standardization
 
 
+# tfの計算モデルの結果を格納
+def get_frames_data(sess, frames):
+    tmp_imgs = []
+    for frame in frames:
+        result_img = sess.run(frame)
+        tmp_imgs.append(result_img)
+    return np.array(tmp_imgs)
+
+
 # 画像保存メソッド
 def imgs_save(imgs, path='test'):
     fig = plt.figure(figsize=(5,5))
@@ -89,6 +98,5 @@ if __name__ == '__main__':
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     with tf.Session() as sess:
-        for frame in imgs_crop([img]):
-            edit_img = sess.run(frame)
-            imgs_show([edit_img])
+        result_imgs = get_frames_data(sess, imgs_processing([img, img]))
+        imgs_show(result_imgs)
