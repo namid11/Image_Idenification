@@ -66,27 +66,40 @@ correct_prediction = tf.equal(tf.argmax(p, 1), tf.argmax(t,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 
+# セーバーインスタンス作成
+saver = tf.train.Saver()
+
 # トレーニング実行
 if __name__ == '__main__':
     with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        #saver = tf.train.Saver()
-        batch_size = 30
+        
+        # チェックポイントの確認
+        ckpt_state = tf.train.get_checkpoint_state("./sess_data")
+        if ckpt_state:
+            # チェックポイントあれば、variableを取得
+            restore_model = ckpt_state.model_checkpoint_path
+            saver.restore(sess, restore_model)
+        else:
+            # チェックポイントがなければ、トレーニング
+            
+            sess.run(tf.global_variables_initializer())
+            batch_size = 30
 
-        t_num = 20000
-        for i in range(t_num):
-            # トレーニングデータ取得
-            set_target_data(1)
-            batch_imgs = get_frames_data(sess, imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size)))
-            batch_imgs = batch_imgs.reshape([-1, 1728])
-            batch_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + batch_size, 10)
-            sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
+            t_num = 20000
+            for i in range(t_num):
+                # トレーニングデータ取得
+                set_target_data(1)
+                batch_imgs = get_frames_data(sess, imgs_processing(getImagesArray(i*batch_size % t_num, i*batch_size % t_num + batch_size)))
+                batch_imgs = batch_imgs.reshape([-1, 1728])
+                batch_labels = getLabelsArray(i*batch_size % t_num, i*batch_size % t_num + batch_size, 10)
+                sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
 
-            # 正解率確認
-            if (i+1) % 500 == 0:
-                set_target_data(2)
-                acc_val = sess.run(accuracy, feed_dict={x:get_frames_data(sess, imgs_crop(getImagesArray(0, 100))).reshape([-1, 1728]),
-                                                        t:getLabelsArray(0, 100, 10)})
-                print('Step: %d, Accuracy: %f' % (i+1, acc_val))
-            else:
-                print('Step: %d' % (i+1))
+                # 正解率確認
+                if (i+1) % 500 == 0:
+                    set_target_data(2)
+                    acc_val = sess.run(accuracy, feed_dict={x:get_frames_data(sess, imgs_crop(getImagesArray(0, 100))).reshape([-1, 1728]),
+                                                            t:getLabelsArray(0, 100, 10)})
+                    print('Step: %d, Accuracy: %f' % (i+1, acc_val))
+                    saver.save(sess, './sess_data/sess.ckpt', global_step=i+1)
+                else:
+                    print('Step: %d' % (i+1))
