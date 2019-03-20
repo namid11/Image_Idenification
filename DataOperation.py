@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-__BASE_DIR_PATH = './data_set/cifar-10-batches-py/'
+__BASE_DIR_PATH = '../data_set/cifar-10-batches-py/'
 __CIFAR_DATA = ['batches.meta', 'data_batch_1', 'data_batch_2', 'data_batch_3', 'data_batch_4', 'data_batch_5', 'test_batch']
 __LABEL_NAME = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 __TARGET_DATA = 1
