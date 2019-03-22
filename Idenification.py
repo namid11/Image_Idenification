@@ -16,7 +16,7 @@ from img_edit import *
 
 
 # １段目の畳み込みフィルターとプーリング層を定義
-num_filters_1 = 32
+num_filters_1 = 8
 
 x = tf.placeholder(tf.float32, [None, 1728])
 x_image = tf.reshape(x, [-1,24,24,3])
@@ -31,7 +31,7 @@ h_pool_1 = tf.nn.max_pool(h_conv_1_cutoff, ksize=[1,2,2,1], strides=[1,2,2,1], p
 
 
 # ２段目の畳み込みフィルターとプーリング層を定義
-num_filters_2 = 64
+num_filters_2 = 16
 
 w_conv_2 = tf.Variable(tf.truncated_normal([5,5,num_filters_1, num_filters_2]))
 h_conv_2 = tf.nn.conv2d(h_pool_1, w_conv_2, strides=[1,1,1,1], padding="SAME")                  # 畳み込み処理
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             sess.run(tf.global_variables_initializer())
             batch_size = 30
 
-            t_num = 20000
+            t_num = 1000
             for i in range(t_num):
                 # トレーニングデータ取得
                 set_target_data(1)
@@ -95,7 +95,7 @@ if __name__ == '__main__':
                 sess.run(train_step, feed_dict={x:batch_imgs, t:batch_labels})
 
                 # 正解率確認
-                if (i+1) % 500 == 0:
+                if (i+1) % 100 == 0:
                     set_target_data(2)
                     acc_val = sess.run(accuracy, feed_dict={x:get_frames_data(sess, imgs_crop(getImagesArray(0, 100))).reshape([-1, 1728]),
                                                             t:getLabelsArray(0, 100, 10)})
